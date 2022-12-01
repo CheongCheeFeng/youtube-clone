@@ -19,6 +19,7 @@ import {
   HelpOutlineOutlined,
   SettingsBrightnessOutlined,
 } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 const Container = styled.div`
   flex: 1;
   background-color: ${({ theme }) => theme.bgLighter};
@@ -78,10 +79,12 @@ function Menu({ darkMode, setDarkMode }) {
   return (
     <Container>
       <Wrapper>
-        <Logo>
-          <Img src={logo} />
-          YouTube
-        </Logo>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Logo>
+            <Img src={logo} />
+            YouTube
+          </Logo>
+        </Link>
         <Item>
           <Home />
           Home
