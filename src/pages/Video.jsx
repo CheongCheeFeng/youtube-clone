@@ -6,6 +6,7 @@ import {
 } from "@mui/icons-material";
 import React from "react";
 import styled from "styled-components";
+import Comments from "../components/Comments";
 
 const Container = styled.div`
   display: flex;
@@ -157,6 +158,8 @@ const Video = () => {
           </ChannelInfo>
           <Subsribe>Subscribe</Subsribe>
         </Channel>
+        <Hr />
+        <Comments />
       </Content>
       <Recomendation>recomendation</Recomendation>
     </Container>
