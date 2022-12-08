@@ -6,6 +6,7 @@ import {
 } from "@mui/icons-material";
 import React from "react";
 import styled from "styled-components";
+import Card from "../components/Card";
 import Comments from "../components/Comments";
 
 const Container = styled.div`
@@ -14,7 +15,7 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  flex: 5;
+  flex: 6;
 `;
 
 const VideoWrapper = styled.div``;
@@ -161,7 +162,15 @@ const Video = () => {
         <Hr />
         <Comments />
       </Content>
-      <Recomendation>recomendation</Recomendation>
+      <Recomendation>
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+      </Recomendation>
     </Container>
   );
 };
