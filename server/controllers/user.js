@@ -43,8 +43,10 @@ export const getUser = async (req, res, next) => {
 
 export const subscribe = async (req, res, next) => {
   try {
-    await User.findById(req.user.id, {
-      $push: { subscriptions: req.params.id },
+    if (req.params.id === req.user.id)
+      return next(createError(403, "You can't subscribe to yourself!"));
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { subscribedUsers: req.params.id },
     });
 
     await User.findByIdAndUpdate(req.params.id, {
