@@ -102,3 +102,26 @@ export const getSubscribedVideos = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getVideosByTags = async (req, res, next) => {
+  const tags = req.query.tags.split(",");
+  console.log(tags);
+  try {
+    const videos = await Video.find({ tags: { $in: tags } }).limit(20);
+    res.status(200).json(videos);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const searchVideos = async (req, res, next) => {
+  const query = req.query.q;
+  try {
+    const videos = await Video.find({
+      title: { $regex: query, $options: "i" },
+    }).limit(40);
+    res.status(200).json(videos);
+  } catch (err) {
+    next(err);
+  }
+};

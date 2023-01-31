@@ -8,6 +8,8 @@ import {
   getTrendingVideos,
   getRandomVideos,
   getSubscribedVideos,
+  getVideosByTags,
+  searchVideos,
 } from "../controllers/video.js";
 import { verifyToken } from "../verifyToken.js";
 
@@ -32,5 +34,9 @@ router.get("/trend", getTrendingVideos);
 router.get("/random", getRandomVideos);
 
 router.get("/subscribed", verifyToken, getSubscribedVideos);
+
+router.get("/tags", getVideosByTags);
+
+router.get("/search", searchVideos);
 
 export default router;
