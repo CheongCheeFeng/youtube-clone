@@ -29,11 +29,11 @@ router.get("/find/:id", getVideo);
 
 router.put("/view/:id", increaseView);
 
-router.get("/trend", getTrendingVideos);
+router.get("/trends", getTrendingVideos);
 
 router.get("/random", getRandomVideos);
 
-router.get("/subscribed", verifyToken, getSubscribedVideos);
+router.get("/subscription", verifyToken, getSubscribedVideos);
 
 router.get("/tags", getVideosByTags);
 

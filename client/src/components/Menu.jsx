@@ -89,18 +89,27 @@ function Menu({ darkMode, setDarkMode }) {
             YouTube
           </Logo>
         </Link>
-        <Item>
-          <Home />
-          Home
-        </Item>
-        <Item>
-          <ExploreOutlined />
-          Explore
-        </Item>
-        <Item>
-          <SubscriptionsOutlined />
-          Subscriptions
-        </Item>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <Home />
+            Home
+          </Item>
+        </Link>
+        <Link to="trends" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <ExploreOutlined />
+            Explore
+          </Item>
+        </Link>
+        <Link
+          to="subscription"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Item>
+            <SubscriptionsOutlined />
+            Subscriptions
+          </Item>
+        </Link>
         <Hr />
         <Item>
           <VideoCallOutlined />
