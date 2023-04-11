@@ -20,6 +20,7 @@ import {
   SettingsBrightnessOutlined,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Container = styled.div`
   flex: 1;
   background-color: ${({ theme }) => theme.bgLighter};
@@ -80,6 +81,8 @@ const Button = styled.button`
 `;
 
 function Menu({ darkMode, setDarkMode }) {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <Container>
       <Wrapper>
@@ -120,17 +123,21 @@ function Menu({ darkMode, setDarkMode }) {
           History
         </Item>
         <Hr />
-        <Login>
-          Sign in to Like videos, comment, and subscribe.
-          <Link to="signin" style={{ textDecoration: "none" }}>
-            <Button>
-              <AccountCircleOutlined />
-              SIGN IN
-            </Button>
-          </Link>
-        </Login>
+        {!currentUser && (
+          <>
+            <Login>
+              Sign in to Like videos, comment, and subscribe.
+              <Link to="signin" style={{ textDecoration: "none" }}>
+                <Button>
+                  <AccountCircleOutlined />
+                  SIGN IN
+                </Button>
+              </Link>
+            </Login>
 
-        <Hr />
+            <Hr />
+          </>
+        )}
         <Item>
           <LibraryMusicOutlined />
           Music
