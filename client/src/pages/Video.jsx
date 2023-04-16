@@ -1,13 +1,27 @@
 import {
   AddTaskOutlined,
   ReplyOutlined,
+  ThumbDown,
+  ThumbDownAlt,
   ThumbDownOffAltOutlined,
+  ThumbUp,
   ThumbUpOutlined,
 } from "@mui/icons-material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
 import Comments from "../components/Comments";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import {
+  dislike,
+  fetchFailure,
+  fetchStart,
+  fetchSuccess,
+  like,
+} from "../redux/videoSlice";
+import { format } from "timeago.js";
 
 const Container = styled.div`
   display: flex;
@@ -110,59 +124,112 @@ const Subsribe = styled.button`
 `;
 
 const Video = () => {
+  const path = useLocation().pathname.split("/")[2];
+
+  const { currentUser } = useSelector((state) => state.user);
+  const { currentVideo } = useSelector((state) => state.video);
+  const dispatch = useDispatch();
+
+  const [channel, setChannel] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch(fetchStart());
+        const videoRes = await axios.get(`/videos/find/${path}`);
+        const channelRes = await axios.get(
+          `/users/find/${videoRes.data.userId}`
+        );
+
+        setChannel(channelRes.data);
+        dispatch(fetchSuccess(videoRes.data));
+      } catch (error) {
+        dispatch(fetchFailure);
+      }
+    };
+
+    fetchData();
+  }, [path, dispatch]);
+
+  const handleLike = async () => {
+    try {
+      await axios.put(`/users/like/${currentVideo._id}`);
+      dispatch(like(currentUser._id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDislike = async () => {
+    try {
+      await axios.put(`/users/dislike/${currentVideo._id}`);
+      dispatch(dislike(currentUser._id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <Container>
-      <Content>
-        <VideoWrapper>
-          <iframe
-            width="100%"
-            height="720"
-            src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-        </VideoWrapper>
-        <Title>Video Title</Title>
-        <Details>
-          <Info>1.2M views • 2 days ago</Info>
-          <Buttons>
-            <Button>
-              <ThumbUpOutlined /> 123
-            </Button>
-            <Button>
-              <ThumbDownOffAltOutlined /> Disliked
-            </Button>
-            <Button>
-              <ReplyOutlined /> Share
-            </Button>
-            <Button>
-              <AddTaskOutlined /> Save
-            </Button>
-          </Buttons>
-        </Details>
-        <Hr />
-        <Channel>
-          <ChannelInfo>
-            <Image src="https://yt3.ggpht.com/yti/APfAmoE-Q0ZLJ4vk3vqmV4Kwp0sbrjxLyB8Q4ZgNsiRH=s88-c-k-c0x00ffffff-no-rj-mo"></Image>
-            <ChannelDetails>
-              <ChannelName>My Channel</ChannelName>
-              <ChannelCounter>200K subscribers</ChannelCounter>
-              <Description>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque
-                autem nobis quos fugit quisquam, voluptate odio quia ut dolore
-                illo, accusantium dolorum sed, reprehenderit voluptatibus? Unde
-                dolores soluta delectus eius.
-              </Description>
-            </ChannelDetails>
-          </ChannelInfo>
-          <Subsribe>Subscribe</Subsribe>
-        </Channel>
-        <Hr />
-        <Comments />
-      </Content>
-      <Recomendation>
+    currentVideo && (
+      <Container>
+        <Content>
+          <VideoWrapper>
+            <iframe
+              width="100%"
+              height="720"
+              src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </VideoWrapper>
+          <Title>{currentVideo.title}</Title>
+          <Details>
+            <Info>
+              {currentVideo.views} • {format(currentVideo.createdAt)}
+            </Info>
+            <Buttons>
+              <Button onClick={handleLike}>
+                {currentVideo.likes?.includes(currentUser?._id) ? (
+                  <ThumbUp />
+                ) : (
+                  <ThumbUpOutlined />
+                )}{" "}
+                {currentVideo.likes?.length}
+              </Button>
+              <Button onClick={handleDislike}>
+                {currentVideo.dislikes?.includes(currentUser?._id) ? (
+                  <ThumbDown />
+                ) : (
+                  <ThumbDownOffAltOutlined />
+                )}{" "}
+                Disliked
+              </Button>
+              <Button>
+                <ReplyOutlined /> Share
+              </Button>
+              <Button>
+                <AddTaskOutlined /> Save
+              </Button>
+            </Buttons>
+          </Details>
+          <Hr />
+          <Channel>
+            <ChannelInfo>
+              <Image src={channel.img}></Image>
+              <ChannelDetails>
+                <ChannelName>{channel.name}</ChannelName>
+                <ChannelCounter>{channel.subscribers}</ChannelCounter>
+                <Description>{currentVideo.desc}</Description>
+              </ChannelDetails>
+            </ChannelInfo>
+            <Subsribe>Subscribe</Subsribe>
+          </Channel>
+          <Hr />
+          <Comments />
+        </Content>
+        {/* <Recomendation>
         <Card type="sm" />
         <Card type="sm" />
         <Card type="sm" />
@@ -170,8 +237,9 @@ const Video = () => {
         <Card type="sm" />
         <Card type="sm" />
         <Card type="sm" />
-      </Recomendation>
-    </Container>
+      </Recomendation> */}
+      </Container>
+    )
   );
 };
 
