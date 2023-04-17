@@ -2,7 +2,6 @@ import {
   AddTaskOutlined,
   ReplyOutlined,
   ThumbDown,
-  ThumbDownAlt,
   ThumbDownOffAltOutlined,
   ThumbUp,
   ThumbUpOutlined,
@@ -22,6 +21,7 @@ import {
   like,
 } from "../redux/videoSlice";
 import { format } from "timeago.js";
+import { subscription } from "../redux/userSlice";
 
 const Container = styled.div`
   display: flex;
@@ -169,6 +169,19 @@ const Video = () => {
     }
   };
 
+  const handleSubscription = async () => {
+    try {
+      if (currentUser.subscribedUsers.includes(channel._id)) {
+        await axios.put(`/users/unsubscribe/${channel._id}`);
+      } else {
+        await axios.put(`/users/subscribe/${channel._id}`);
+      }
+      dispatch(subscription(channel._id));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     currentVideo && (
       <Container>
@@ -224,7 +237,11 @@ const Video = () => {
                 <Description>{currentVideo.desc}</Description>
               </ChannelDetails>
             </ChannelInfo>
-            <Subsribe>Subscribe</Subsribe>
+            <Subsribe onClick={handleSubscription}>
+              {currentUser.subscribedUsers?.includes(channel._id)
+                ? "SUBSCRIBED"
+                : "SUBSCRIBE"}
+            </Subsribe>
           </Channel>
           <Hr />
           <Comments />
