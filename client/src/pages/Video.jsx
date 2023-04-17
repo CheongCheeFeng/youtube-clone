@@ -8,7 +8,6 @@ import {
 } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Card from "../components/Card";
 import Comments from "../components/Comments";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -22,6 +21,7 @@ import {
 } from "../redux/videoSlice";
 import { format } from "timeago.js";
 import { subscription } from "../redux/userSlice";
+import Recommendation from "../components/Recommendation";
 
 const Container = styled.div`
   display: flex;
@@ -68,10 +68,6 @@ const Button = styled.div`
 const Hr = styled.hr`
   margin: 15px 0px;
   border: 0.5px solid ${({ theme }) => theme.soft};
-`;
-
-const Recomendation = styled.div`
-  flex: 2;
 `;
 
 const Channel = styled.div`
@@ -244,15 +240,7 @@ const Video = () => {
           <Hr />
           <Comments videoId={currentVideo._id} />
         </Content>
-        {/* <Recomendation>
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-        <Card type="sm" />
-      </Recomendation> */}
+        <Recommendation tags={currentVideo.tags} />
       </Container>
     )
   );
