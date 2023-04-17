@@ -123,6 +123,12 @@ const Subsribe = styled.button`
   cursor: pointer;
 `;
 
+const VideoFrame = styled.video`
+  width: 100%;
+  max-height: 720px;
+  object-fit: cover;
+`;
+
 const Video = () => {
   const path = useLocation().pathname.split("/")[2];
 
@@ -187,15 +193,7 @@ const Video = () => {
       <Container>
         <Content>
           <VideoWrapper>
-            <iframe
-              width="100%"
-              height="720"
-              src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
+            <VideoFrame src={currentVideo.videoUrl} />
           </VideoWrapper>
           <Title>{currentVideo.title}</Title>
           <Details>
@@ -244,7 +242,7 @@ const Video = () => {
             </Subsribe>
           </Channel>
           <Hr />
-          <Comments />
+          <Comments videoId={currentVideo._id} />
         </Content>
         {/* <Recomendation>
         <Card type="sm" />
